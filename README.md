@@ -7,7 +7,8 @@
 🛠️ Built with: React, IndexedDB, Google Gemini 1.5 Pro API  
 🔍 *Currently seeking frontend/full-stack opportunities*
 
-![App Screenshot](/assets/screenshot.png) *Replace with actual screenshot*
+![image](https://github.com/user-attachments/assets/be834b35-d488-4038-b5c0-3246d3b3a70e)
+
 
 ## Key Features
 
