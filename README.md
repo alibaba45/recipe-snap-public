@@ -1,4 +1,4 @@
-# RecipeVision 🍳
+# RecipeSnap 🍳
 
 **AI-Powered Recipe Management System**  
 *Scan, organize, and enhance your recipes with intelligent assistance*
