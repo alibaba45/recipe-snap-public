@@ -30,11 +30,13 @@
 
 ## Technical Implementation
 ```mermaid
-graph TD
-    A[React Frontend] --> B[IndexedDB]
-    A --> C[Google Gemini API]
-    C --> D[OCR Processing]
-    C --> E[AI Suggestions]
+flowchart TD
+    A[Add Recipe] -->|User types Recipe name, ingredients or instructions| B(chunking catches user intent)
+    B --> C{on onblur AI makes changes to each of the component}
+    C -->|One| D[Title ]
+    C -->|Two| E[ingredients]
+    C -->|Three| F[instructions]
+    C -->|Three| G[tags]
 ```
 Key Technologies:
 
