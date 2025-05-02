@@ -1,0 +1,15 @@
+Changelog:
+
+
+[Date] - 2025/05/01
+- **feat(auth):** Implement Firebase Google Authentication using signInWithPopup.
+- **feat(auth):** Add global authentication state management via React Context (AuthContext).
+- **feat(ui):** Integrate user login status, Sign In/Sign Out buttons into App Header.
+- **feat(ui):** Add 'Organizer' tab and placeholder view to Bottom Navigation.
+- **feat(ui):** Display loading indicator during background AI operations near AI Chat FAB.
+- **fix(auth):** Resolve Firebase/GCP configuration mismatch preventing Google Sign-in.
+- **fix(auth):** Ensure correct OAuth Client ID and Redirect URI are configured.
+- **fix(ui):** Keep AI Chat FAB visible on Edit/Detail views.
+- **fix(dev):** Change development server port to avoid EADDRINUSE conflict.
+- **fix(nav):** Correct navigation logic for the new 'Organizer' tab.
+- **refactor(auth):** Lift AI analysis loading state (isAiLoading) to parent component.
