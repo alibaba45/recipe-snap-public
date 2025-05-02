@@ -1,7 +1,21 @@
 Changelog:
 
 
-[Date] - 2025/05/01
+2024-05-02
+feat: Implement Firebase Authentication with Google Sign-In context provider.
+feat: Add Firestore database service (firestoreService.ts) for recipe CRUD operations.
+feat: Implement Repository pattern (recipeRepository.ts) to abstract data source logic.
+feat: Integrate Zustand (recipeStore.ts) for centralized recipe state management.
+refactor: Update main page (page.tsx) to use Zustand store for state and actions.
+refactor: Update Settings view to use AuthContext.
+fix: Add data cleaning in firestoreService.ts to remove undefined values before writes.
+fix: Correct various TypeScript and syntax errors in multiple components.
+fix: Update Firestore security rules to allow null values for optional fields.
+feat: Add conditional "Save to Cloud" button in RecipeDetail for testing Firestore writes.
+chore: Attempt Firebase Emulator setup and troubleshoot environment issues (Java, Ports, Nix).
+chore: Revert Firebase config to use live backend due to emulator/login constraints.
+
+2025/05/01
 - **feat(auth):** Implement Firebase Google Authentication using signInWithPopup.
 - **feat(auth):** Add global authentication state management via React Context (AuthContext).
 - **feat(ui):** Integrate user login status, Sign In/Sign Out buttons into App Header.
