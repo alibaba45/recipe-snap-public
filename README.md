@@ -3,7 +3,7 @@
 **AI-Powered Recipe Management System**  
 *Scan, organize, and enhance your recipes with intelligent assistance*
 
-🌐 [Live Preview](https://9000-idx-studio-1745386299456.cluster-ikxjzjhlifcwuroomfkjrx437g.cloudworkstations.dev/?monospaceUid=993302)  
+🌐 [Live Preview](https://9000-idx-studio-1745386299456.cluster-ikxjzjhlifcwuroomfkjrx437g.cloudworkstations.dev/?monospaceUid=245840)  
 🛠️ Built with: React, IndexedDB, Google Gemini 1.5 Pro API  
 🔍 *Currently seeking frontend/full-stack opportunities*
 
