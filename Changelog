@@ -1,5 +1,24 @@
 Changelog:
+2025-05-07
+feat: Implement Admin User Designation via Firebase Custom Claims
+- Added Firebase Cloud Function (`processAdminClaimRequest`) triggered by Firestore writes to `adminClaimRequests` collection to set/remove `admin:true` custom claims on users.
+- Implemented `adminActionLogs` Firestore collection for auditing administrative changes made by the Cloud Function.
+- Upgraded Firebase project to Blaze plan to support Cloud Function deployment.
+- Updated `AuthContext` to read custom claims from user ID tokens and expose an `isAdmin` boolean state.
+- Modified `AppHeader` to display an "Admin" title variant and a conditional admin panel icon/link for users with the `admin:true` claim.
+- Iteratively debugged and resolved Cloud Function deployment errors, including ESLint issues, SDK syntax errors for v2 Firestore triggers, and Eventarc permission propagation delays.
 
+2025-05-04
+feat: Implement Firestore cloud save for recipes when logged in.
+feat: Add data cleaning to convert undefined optional fields to null before Firestore writes.
+feat: Refactor recipe store to use separate 'isSaving' state for add/update operations.
+feat: Implement post-save alert feedback (Option 3).
+feat: Add 'Clear Form' button to Recipe Edit view.
+feat: Refactor AI blur logic into reusable 'useRecipeAiAssist' custom hook.
+fix: Resolve Firestore 'permission-denied' error by correcting security rules and data preparation.
+fix: Correct multiple TypeScript errors related to props and state management in page and RecipeEdit components.
+fix: Correct 'handleInputChange' calling convention in RecipeEdit.
+chore: Configure local Git user identity.
 
 2024-05-02
 feat: Implement Firebase Authentication with Google Sign-In context provider.
