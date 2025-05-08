@@ -1,4 +1,17 @@
 Changelog:
+2025-05-08
+feat(admin): Implement admin user profile management
+
+- Add callable Cloud Function `getUserProfileAdmin` to fetch user profiles from Firestore.
+- Add callable Cloud Function `updateUserAdmin` to update user profiles (tier, tokens, notes) with input validation, sanitization, and audit logging.
+- Create `firestoreUtils.js` with `getUserDocument` and `updateUserDocument` helpers.
+- Create `actionLogUtils.js` with `createAuditLog` helper for logging admin actions to Firestore.
+- Update Admin Page UI (`/admin`) to display fetched user profile details upon selection from the user list.
+- Implement edit-in-place functionality on Admin Page for selected user profiles (Tier, Tokens, Notes) with Save/Cancel actions calling `updateUserAdmin`.
+- Add back button navigation to Admin Page.
+- Fix various Cloud Function deployment issues (linting, imports, parsing).
+- Refactor Cloud Function region handling for client-side calls.
+- Ensure Firestore `users` collection exists for testing profile management.
 2025-05-07
 feat: Implement Admin User Designation via Firebase Custom Claims
 - Added Firebase Cloud Function (`processAdminClaimRequest`) triggered by Firestore writes to `adminClaimRequests` collection to set/remove `admin:true` custom claims on users.
