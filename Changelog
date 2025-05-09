@@ -1,4 +1,20 @@
 Changelog:
+2025-05-09
+### Fixed
+- Resolved critical client-side infinite loop in OCR usage fetching (`useOcrHandler.ts`) caused by incorrect `useEffect` dependencies, significantly reducing Firebase Function invocations and Firestore reads.
+- Corrected TypeScript errors related to variable declaration order and scope in `page.tsx` and `useOcrHandler.ts`.
+- Stabilized Firebase Functions service initialization within `useOcrHandler.ts` by switching to a globally initialized instance from `config.ts`.
+
+### Changed
+- Refactored OCR initiation logic from `page.tsx` into a dedicated custom hook `useOcrHandler.ts` for better separation of concerns.
+- Deployed `getUserOcrUsage` v2 Cloud Function to fetch user's OCR scan count and limits.
+- Updated `functions/index.js` to correctly export functions from newly created `usageCapFunctions.js`.
+
+### Added
+- Initial client-side logic in `useOcrHandler.ts` to call `getUserOcrUsage` and manage loading/error states for OCR usage data.
+- Manual Firestore setup for `users/{uid}/usage/{YYYY-MM}` to store `ocrScanCount`.
+- (Conceptual) Planned for local-first OCR counter display using IndexedDB to minimize initial Firebase calls.
+
 2025-05-08
 feat(admin): Implement admin user profile management
 
