@@ -1,4 +1,17 @@
 Changelog:
+2025-05-10
+### Fixed
+- Resolved IndexedDB error "keyPath did not yield a value" during new recipe creation by ensuring a local ID is generated before saving to the local database.
+- Corrected HTML nesting issue in RecipeEdit component causing console errors by removing a conflicting Tooltip.
+- Addressed Firestore data inconsistency with duplicate ocrScanCount fields.
+
+### Changed
+- Refined OCR processing flow to support different models for usage increment timing (upfront vs. on explicit save).
+- (On debug branch) Reverted OCR handling logic in main page component to a pre-hook state for focused debugging of save issues.
+
+### Added
+- (Conceptual) Planned for `requestOcrUsageCredit` Cloud Function and client-side logic for users to report OCR API failures after usage increment for manual review.
+- (Cloud Functions) Successfully deployed `getUserOcrUsage` and `attemptAndIncrementUsage` functions.
 2025-05-09
 ### Fixed
 - Resolved critical client-side infinite loop in OCR usage fetching (`useOcrHandler.ts`) caused by incorrect `useEffect` dependencies, significantly reducing Firebase Function invocations and Firestore reads.
