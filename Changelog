@@ -1,4 +1,42 @@
 Changelog:
+2025-05-11
+### Feature: OCR Quota System & Processing Flow Foundation (Client-Side)
+
+- **User Quota Management (`AuthContext`, `UserStore`):**
+    - Implemented `UserStore` with Zustand `persist` middleware to cache OCR credits remaining, monthly limit, and last fetch timestamp in `localStorage`, enabling offline UI display of last known quota.
+    - Refined `AuthContext` to:
+        - Fetch authoritative quota via `getUserOcrUsage` Cloud Function on user login if local cache is empty.
+        - Handle network errors during quota fetch gracefully by displaying persisted data and setting an error state, rather than resetting quota to zero.
+        - Establish a Firestore `onSnapshot` listener for the user's monthly usage document (`users/{userId}/usage/{currentMonth}`).
+        - The `onSnapshot` callback now robustly updates both `ocrCreditsRemaining` (based on `ocrScanCount`) and `ocrMonthlyLimit` (if the `limit` field changes in the snapshot) in the `UserStore`.
+        - Correctly clears user-specific quota data from `UserStore` and `localStorage` on logout.
+- **Firestore:**
+    - Updated security rules to grant users read access to their own main user document (`/users/{userId}`) and their specific monthly usage documents (`/users/{userId}/usage/{usageDocId}`).
+- **OCR Processing Hook (`useOcrProcessor` - Drafted):**
+    - Designed the hook to manage the end-to-end OCR process.
+    - Includes client-side pre-flight check of `ocrCreditsRemaining` from `UserStore`.
+    - Calls `attemptAndIncrementUsage` Cloud Function for server-side credit debit.
+    - Calls the `/api/ai/ocr` Next.js API route.
+    - Prepares OCR data to match the application's `Recipe` interface (including `_isFromOcr: true`).
+    - Saves the initial OCR draft to local IndexedDB via the `useRecipeStore.addRecipe` action (ensuring optimistic UI updates).
+    - Includes logic to call `refundOcrCredit` Cloud Function if the OCR API call fails after a credit has been successfully debited.
+    - Manages `isLoading` and `error` states for UI feedback.
+- **UI Components (Drafted & Integrated for OCR Flow):**
+    - `OcrUploader.tsx`: Component to handle file input, display OCR processing state (loading, error, credits remaining via `useOcrProcessor`), and trigger the processing.
+    - `AddRecipeSheet.tsx`: Modified to trigger an OCR modal (controlled by `page.tsx`) when "Scan from Image" is selected.
+    - `RecipeList.tsx`: Modified to include a "Scan Recipe" button that displays available credits and also triggers the OCR modal.
+    - `page.tsx`:
+        - Manages the visibility of the OCR modal containing `OcrUploader`.
+        - Implements `handleOcrScanSuccess` to receive the locally saved OCR draft and navigate to `RecipeEdit`.
+        - Simplified `handleSaveRecipe` to remove upfront credit deduction logic (now handled by `useOcrProcessor`); it now focuses on updating existing OCR drafts or adding new manual recipes.
+- **Bug Fixes & Refinements:**
+    - Resolved various TypeScript errors related to `HttpsCallableResult` type inference and component prop mismatches.
+    - Added `_isFromOcr` flag to the core `Recipe` interface.
+    - Corrected Firestore security rule paths and permissions.
+- **Identified Next Steps:**
+    - Full implementation and testing of `useOcrProcessor` and `OcrUploader`.
+    - Finalizing `page.tsx` integration and `handleSaveRecipe` simplification.
+    - Addressing the CORS issue for the `refundOcrCredit` Cloud Function.
 2025-05-10
 ### Fixed
 - Resolved IndexedDB error "keyPath did not yield a value" during new recipe creation by ensuring a local ID is generated before saving to the local database.
