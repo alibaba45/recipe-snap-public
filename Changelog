@@ -1,4 +1,19 @@
 Changelog:
+2025-05-13
+### 🐛 Bug Fixes & Resilience (Planned & Confirmed by User)
+
+- **OCR API JSON Parsing:** Implemented a `cleanJsonString` utility in the `/api/ai/ocr` route to handle and remove trailing commas from AI-generated JSON, preventing parsing errors.
+- **OCR Credit Refund Flow:**
+    - Diagnosed that the `refundOcrCredit` Cloud Function was missing.
+    - Designed and planned the `refundOcrCredit` v2 Firebase Function, including audit logging.
+    - Confirmed (by user) that after implementation and deployment, the refund mechanism works correctly when triggered by a simulated client-side error.
+
+### 🛠️ UI/UX Improvements
+
+- **`OcrUploader.tsx` Enhancements:**
+    - Now correctly handles "no credits" scenarios by disabling upload functionality and displaying clear messages.
+    - Manages "not logged in" state by prompting users to sign in and appropriately disabling features.
+- **`page.tsx` (Recipe List Update):** Integrated `fetchRecipes` into `handleOcrScanSuccess` to ensure the main recipe list updates immediately after an OCR draft is saved locally.
 2025-05-11
 ### Feature: OCR Quota System & Processing Flow Foundation (Client-Side)
 
