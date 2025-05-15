@@ -1,4 +1,30 @@
 Changelog:
+2025-05-15
+feat(api): Implement /api/ai/generate-recipe-field endpoint for contextual recipe field suggestions
+- API route created using Next.js App Router structure.
+- Supports suggestions for fields: title, description, ingredients, preparation, instructions, tags.
+- Accepts current recipe draft, title, user profile data (pantry, preferences, unit system), and suggestion context (Basic, PantryOptimized, UserPreferenceEnhanced) as input.
+- Dynamically builds prompts for Gemini 1.5 Pro, considering existing field content, servings, and user context.
+- For 'ingredients' field, prompts AI to return structured data (list of ingredient objects with name, US/Metric units, size_modifier, prep_notes). Defaults to requesting dual US/Metric units.
+- For other fields, prompts AI to return an array of text suggestions.
+- Includes server-side mock profile override for testing via 'X-Use-Mock-Profile' header.
+- Successfully tested with Postman, demonstrating high-quality structured output for ingredients.
+
+feat(api): Implement /api/ai/seed-recipe-idea endpoint for title suggestion cache
+- API route created using Next.js App Router structure.
+- Accepts reference recipe title, tags, and user profile data.
+- Calls Gemini LLM to generate complementary recipe titles.
+- Tested via temporary button in RecipeEdit, successfully populates client-side IndexedDB cache.
+
+feat(cache): Implement IndexedDB titleSuggestionsCache for recipe title auto-complete
+- Defined schema and config in titleCacheConfig.ts.
+- Implemented utility functions (open, add, query, increment selection) using 'idb' library.
+
+fix(api): Corrected API route structure from Pages Router to App Router for /seed-recipe-idea, resolving 405 errors.
+fix(client): Resolved TypeScript errors in RecipeEdit.tsx related to shared types and toast component usage.
+fix(client): Addressed runtime errors in RecipeEdit.tsx by refactoring component state and handlers during AI feature testing.
+chore(types): Created shared aiTypes.ts for AI API request/response interfaces (FieldName, SuggestionContext, UserProfileDataPayload, etc.).
+chore(functions): Added missing Firebase Callable Functions (getUserAiAssistUsage, getUserOcrUsage) to resolve client-side CORS errors.
 2025-05-13
 ### 🐛 Bug Fixes & Resilience (Planned & Confirmed by User)
 
