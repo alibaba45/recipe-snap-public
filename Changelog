@@ -1,4 +1,18 @@
 Changelog:
+2025-05-16
+feat(ai): Implement structured title generation API (Phase 1)
+
+- Added `StructuredTitleSuggestion` type for returning detailed title components.
+- Centralized culinary keywords (methods, adjectives, dish categories, common ingredients) into `src/lib/culinaryData.ts`.
+- Enhanced `detectCookingInfo` utility in `generate-recipe-field` API to identify dish categories and utilize centralized culinary data for improved recipe analysis.
+- Overhauled `buildGenerateFieldPrompt` for `fieldName: "title"`:
+    - Instructs LLM to output an array of `StructuredTitleSuggestion` objects.
+    - Provides detailed guidance on deriving `methodStyle` (method or category), `mainDishComponent`, and optional `adjective`.
+    - Incorporates hints from `detectCookingInfo` and establishes a clear hierarchy for contextual influence.
+- Updated the `POST` handler in `generate-recipe-field` API to correctly parse and validate the new `StructuredTitleSuggestion[]` response for titles.
+- Successfully tested structured title generation across multiple recipe types (soup, roasted dishes, salads, desserts), confirming accurate component extraction and high-quality title strings.
+- Added placeholder logic for future `conceptualTags` generation.
+
 2025-05-15
 feat(api): Implement /api/ai/generate-recipe-field endpoint for contextual recipe field suggestions
 - API route created using Next.js App Router structure.
