@@ -1,4 +1,29 @@
 Changelog:
+2025-05-17
+feat: Implement robust Recipe DNA generation API
+
+- Add new API endpoint `/api/ai/generate-recipe-dna` for comprehensive recipe analysis.
+- Utilize Gemini 1.5 Pro with Tool Calling for structured `RecipeDNADetail` output.
+- Define detailed JSON schema (`recipeDNADetailToolSchema`) for AI tool, including fields for annotated ingredients (with descriptors), annotated instructions, AI conceptual tags, user tag analysis, and recipe estimates.
+- Implement comprehensive prompt engineering for accurate parsing and desired output style, particularly for foundational `aiConceptualTags` and ingredient `descriptors`.
+- Successfully test API across diverse recipe types (soup, baking, stir-fry, no-cook, grouped ingredients), validating parsing accuracy for various structures and unit preferences.
+
+fix: Resolve server-side and client-side initialization errors
+
+- Implement `safeLocalStorage` wrapper in `userStore.ts` to prevent `localStorage` access errors during SSR.
+- Standardize AI client initialization using a shared `getGenAIClient` and `GOOGLE_GENAI_API_KEY` environment variable.
+- Correct `onRehydrateStorage` in `userStore.ts` to prevent "Cannot access 'useUserStore' before initialization" error by using the passed store instance.
+- Align function signatures and type definitions for user profile data handling (`initializeUserProfileDataIfNeeded`, `getMvpUserProfileData`) to resolve TypeScript errors.
+- Address API client (Postman) configuration issues (port, URL, headers) for successful backend testing.
+
+refactor: Plan for user profile data model consolidation
+
+- Strategize to revert UI components to a stable state to address client-side infinite loops.
+- Outline plan to refactor user profile data:
+  - Define `ComprehensiveUserProfile` in `aiTypes.ts` as the single source of truth.
+  - Update `userStore.ts` to use `ComprehensiveUserProfile` for `state.profileData`.
+  - Update `AuthContext.tsx` to fetch and populate the full `ComprehensiveUserProfile` into the store.
+- This refactor will create a stable data foundation for subsequent AI feature integration in UI components like `RecipeEdit.tsx`.
 2025-05-16
 feat(ai): Implement structured title generation API (Phase 1)
 
