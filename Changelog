@@ -1,4 +1,18 @@
 Changelog:
+ 2024-05-19
+feat: Solidify Comprehensive User Profile & Auth Flow
+
+- Defined canonical user profile types (`ComprehensiveUserProfile`, `UserPreferences`, etc.) in `src/types/index.ts`.
+- Refactored `userStore.ts` to manage `ComprehensiveUserProfile`, `currentUser`, and handle localStorage hydration with SSR safety.
+- Extensively refactored `AuthContext.tsx`:
+    - Orchestrates fetching and creation of `ComprehensiveUserProfile` in Firestore.
+    - Correctly populates `userStore` with profile data, respecting store hydration.
+    - Implemented robust logic for new user profile document creation, including data cleaning (undefined to null) and server-set timestamps, resolving previous `setDoc` errors.
+    - Resolved infinite loop during new user sign-up by implementing a `useRef` flag to manage profile creation attempts within snapshot listeners.
+    - Establishes a default guest profile on logout.
+    - Improved listener cleanup and `useEffect` stability.
+- Updated Firestore security rules for `/users/{userId}` (`allow create`, `allow update`) to align with `ComprehensiveUserProfile` structure, data types, and timestamp handling (server timestamps for create/update). Validated rules in Playground.
+- Drafted `USER_PROFILE_ARCHITECTURE.md` for user data flow and structure.
 2025-05-17
 feat: Implement robust Recipe DNA generation API
 
