@@ -1,4 +1,31 @@
 Changelog:
+2024-05-21
+feat: Implement initial data seeding for recipes and title autocomplete
+- Added logic to `page.tsx` to populate local IndexedDB with initial sample recipes and their titles for autocomplete on first app load.
+- Ensured seeding occurs only once per new user/browser via a localStorage flag.
+- Refined `recipeStore.ts` to remove conflicting initial data logic, making `page.tsx` the authority for seeding.
+
+feat: Implement Phase 0 - Client-Side Title Autocomplete & Mocked AI Tag Generation
+- `RecipeEdit.tsx` now features title autocomplete querying local cache (seeded by initial data).
+- Selecting an autocomplete suggestion or blurring the title input (when AI Assist is ON) triggers a call to a new (currently mocked) backend API `/api/ai/generate-tags`.
+- `tagsText` field in `RecipeEdit.tsx` is populated with tags from the mock API.
+- All Phase 0 AI features are controlled by the main "AI Assist" toggle.
+
+fix: Resolved React duplicate key warnings during initial data seeding
+- Corrected data flow to prevent temporary duplication of initial recipes in Zustand store, which caused React key errors in lists.
+
+design: Refined multi-phase AI recipe assistance strategy
+- Phase 0: Title finalization with client-side autocomplete.
+- Phase 1, Stage 1: AI Fab reveals options (Basic, Pantry, User Preference, Pantry+User Pref) to generate a single, context-specific recipe draft (textual description, ingredients, instructions) and conceptual tags. This draft populates the form.
+- Phase 1, Stage 2: Recipe DNA is generated for the chosen/applied draft and stored. AI Fab indicates "DNA Ready."
+- Phase 2: "DNA Ready" AI Fab opens an interactive chat panel for DNA-assisted, line-by-line recipe polishing.
+
+feat(backend): Implement API for generating contextual recipe draft variations
+- Created `/api/ai/generate-single-draft-variation/route.ts` (or refactored existing).
+- Designed `singleRecipeDraftToolSchema` for Gemini to output structured draft content (conceptual tags, title, desc, ingredients text, instructions text) for one variation.
+- Implemented prompt logic to generate Basic, Pantry Optimized, or User Preference focused drafts based on client request.
+
+refactor: Clarified tag system with `aiConceptualTags` (read-only, AI-generated) and user-editable tags.
  2024-05-19
 feat: Solidify Comprehensive User Profile & Auth Flow
 
