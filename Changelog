@@ -1,5 +1,25 @@
 Changelog:
-2024-05-21
+ 2024-05-21
+feat: Implement Phase 1 AI Draft Generation UI and State Flow
+
+- Added `aiInterfaceStore.ts` (Zustand) for managing AI chat panel visibility, context, active recipe AI state (ID, phase, DNA readiness), and related actions.
+- Modified `userStore.ts` to include a global `isAiAssistEnabled` setting.
+- Created `AIFab.tsx` component to trigger AI panel; FAB appearance and actions are context-aware (login status, AI enabled, current AI phase).
+- Refactored `page.tsx` (RecipeSnapContainer) to use global AI states from stores and render the new `AIFab`.
+- Significantly updated `RecipeEdit.tsx`:
+    - Subscribes to `aiInterfaceStore` for panel state and AI phase.
+    - Manages AI context by setting the current recipe ID in `aiInterfaceStore`.
+    - Implements a 2-column layout to display `AIChatPanel` alongside the form.
+    - Contains handlers (`handleGenerateSingleDraftVariation`, `handleInitiateDnaGeneration` (mocked)) for Phase 1 AI actions.
+    - Passes necessary props and callbacks to `AIChatPanel`.
+- Created `AIChatPanel.tsx` component:
+    - Renders its own UI shell (header, close button).
+    - Dynamically displays content based on `currentPhase` prop (draft options, DNA trigger, loading states, status messages).
+    - Calls back to `RecipeEdit.tsx` to initiate AI actions.
+- Refactored API route `/api/ai/analyze/route.ts` to `/api/ai/generate-single-draft-variation/route.ts` for generating single, specific recipe drafts, including a new `singleRecipeDraftToolSchema`.
+- Fixed various TypeScript errors, UI rendering bugs (duplicate panels), and state synchronization issues to achieve correct initial UI flow for draft selection.
+- Removed old `useRecipeAiAssist` onBlur functionality, centralizing AI draft initiation via the new panel.
+2024-05-20
 feat: Implement initial data seeding for recipes and title autocomplete
 - Added logic to `page.tsx` to populate local IndexedDB with initial sample recipes and their titles for autocomplete on first app load.
 - Ensured seeding occurs only once per new user/browser via a localStorage flag.
