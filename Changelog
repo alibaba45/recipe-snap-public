@@ -1,4 +1,21 @@
 Changelog:
+2024-05-22
+feat(ai): Implement Phase 1 Recipe DNA generation and display
+
+- Added `/api/ai/generate-recipe-dna` endpoint to produce detailed, structured Recipe DNA using Gemini with a custom tool schema.
+- Updated types: `RecipeDNADetail`, `CurrentRecipeDraftPayload` defined. `RecipeFormState` and `Recipe` type now include `aiAnalyzedTitle` and `aiConceptualTags`. `Recipe` type also includes `searchableTags`.
+- `useRecipeAiOrchestrator`:
+    - `initiateDnaGeneration` now calls the live DNA API.
+    - On success, populates `aiInterfaceStore.currentRecipeDna`.
+    - Updates `RecipeFormState` with `aiAnalyzedTitle` and `aiConceptualTags` from the DNA.
+- `aiInterfaceStore`: Added state for `currentRecipeDna` and action `setActualRecipeDna`. Refined `setDnaReadyForRecipe` for phase/state management.
+- `RecipeEdit.tsx`:
+    - `handleSubmit` now calculates and saves `searchableTags` (merged user & AI tags) and persists `aiAnalyzedTitle` & `aiConceptualTags`.
+    - Displays AI-generated `aiConceptualTags` in the main form after DNA processing.
+    - Passes `currentRecipeDna` and other relevant form data to `AIChatPanel`.
+- `AIChatPanel.tsx`:
+    - When `recipeAiPhase` is 'polishing', now displays key insights from `RecipeDNADetail` including: AI analyzed title, AI conceptual tags, analysis of user's tags, AI estimated cook time/servings, and AI overall summary.
+- Successfully tested end-to-end flow for draft generation followed by DNA generation, storage, and display of insights.
  2024-05-21
 feat: Implement Phase 1 AI Draft Generation UI and State Flow
 
