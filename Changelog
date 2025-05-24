@@ -1,4 +1,34 @@
 Changelog:
+
+2024-05-24
+
+### Features & Enhancements:
+- **AI DNA Generation V2:**
+  - Implemented structured title analysis within `RecipeDNADetail`, outputting `aiAnalyzedTitle` as an object with `originalUserTitle`, `titleString`, `mainDishComponent`, `methodStyle`, and `adjective`.
+  - Enhanced `annotatedPreparationSteps` in `RecipeDNADetail` to include structured fields: `actions`, `ingredientsMentioned`, `toolsMentioned`, `duration`, and `temperature`.
+  - AI prompts for DNA generation significantly refined for accuracy in `annotatedIngredients` (strict purchasable form) and structured `annotatedPreparationSteps`.
+- **AI Draft Generation:**
+  - Prompts refined to ensure `singleRecipeDraftToolSchema` outputs a simple `title: string`.
+  - Prompts for `preparationText` and `instructionsText` updated for clarity and consistent multi-line formatting (no explicit numbering for instructions).
+- **Frontend AI Integration:**
+  - `RecipeEdit.tsx` now updates `formState.aiAnalyzedTitle` with `titleString` from DNA and populates `formState.aiConceptualTags`.
+  - Implemented enhanced client-side deduplication of user custom tags (`formState.tagsText`) against AI conceptual tags, handling simple plurals and variations.
+  - `AIChatPanel.tsx` updated to display AI Processed Title and AI Conceptual Tags during the 'polishing' phase (other DNA metrics display deferred for now).
+  - Added `pendingAiSuggestions` state and related actions/selectors to `aiInterfaceStore.ts` in preparation for AI Assessor polishing suggestions.
+
+### Bug Fixes & Refinements:
+- Resolved Gemini SDK schema validation errors (`parameters.required[X]: property is not defined`) by ensuring consistency between schema properties and required arrays.
+- Fixed React error "Objects are not valid as a React child" by correctly accessing string properties from the structured `aiAnalyzedTitle` object for display.
+- Addressed potential infinite loop in `RecipeEdit.tsx` `useEffect` for DNA processing by refining dependency array and conditional updates.
+- Ensured UUIDs are correctly injected by the backend into all line items within `annotatedIngredients`, `annotatedPreparationSteps`, and `annotatedInstructionSteps` in the DNA.
+
+### Schema & Type Changes:
+- `singleRecipeDraftToolSchema`: Title property simplified to a single string.
+- `recipeDNADetailToolSchema`: 
+  - `aiAnalyzedTitle` converted to a nested object with structural components.
+  - `annotatedPreparationSteps` items expanded with structured fields.
+  - `userTagAnalysis` property removed.
+- TypeScript types (`RecipeDraftVariation`, `CurrentRecipeDraftPayload`, `RecipeDNADetail`, `AnnotatedPreparationStep`, `AnalyzedTitleObject`) updated to reflect all schema changes and data flow adjustments.
 2024-05-22
 feat(ai): Implement Phase 1 Recipe DNA generation and display
 
