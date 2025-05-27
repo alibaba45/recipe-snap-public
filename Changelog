@@ -1,4 +1,27 @@
 Changelog:
+2024-05-26
+feat(data): Refactor Recipe data model and local DB for separate DNA storage
+- Centralized Recipe, Ingredient, Nutrition types in `types/index.ts`.
+- Updated `Recipe` type to include `recipeDNADetailId`, `userNutritionInput`, `recipeType`, `status`, denormalized AI fields (`aiAnalyzedTitle` object, `aiConceptualTags`, `aiOverallSummarySnapshot`), `usedSignatureElementIds`, and element-specific attributes (`baseDishCompatibility`, `elementInsertionPoints`).
+- Refactored `lib/db.ts` (IndexedDB):
+    - Added `recipeDNADetails` object store (DB_VERSION 3).
+    - `saveRecipe` now handles saving main Recipe data and associated RecipeDNADetail to separate stores, and populates denormalized fields on the main Recipe object.
+    - `getRecipeById` now fetches and combines Recipe and its linked RecipeDNADetail.
+    - `deleteRecipe` now deletes from both stores.
+    - Added standalone methods for `saveRecipeDNADetail`, `getRecipeDNADetailById`, `deleteRecipeDNADetailById`.
+- Updated `recipeRepository.ts` (`saveRecipe`):
+    - Signature now accepts `associatedDna?: RecipeDNADetail | null`.
+    - Logic added to populate denormalized AI fields and generate `searchableTags` on the Recipe object before local save.
+    - Prepared for separate Firestore DNA saving (though Firestore part deferred for DNA itself).
+feat(ui): Enhance Recipe display and editing for new data fields
+- Updated `RecipeList.tsx` and `RecipeDetail.tsx` to display `searchableTags`.
+- Enhanced `RecipeDetail.tsx` to display new `Recipe` fields: description, AI overview, user-entered nutrition, recipe type, status, preparation notes, and element-specific details.
+- Updated `RecipeEdit.tsx`:
+    - Added UI form fields for `userNutritionInput`.
+    - Refined `useEffect` for `initialRecipeData` to correctly handle various data types.
+    - Corrected `handleSubmit` to populate `Recipe.aiAnalyzedTitle` with the full `AnalyzedTitleObject` and correctly package `userNutritionInput`.
+fix(ui): Resolved `capitalizeTag is not defined` runtime error in display components.
+chore(types): Standardized ID types (e.g., `UserSavedSignatureElementInfo.id` to `number`).
 
 2024-05-23-2024-05-24
 
