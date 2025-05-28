@@ -1,4 +1,22 @@
 Changelog:
+2024-05-28
+### Fixed
+- Resolved critical Firestore permission errors for recipe create, update, and delete operations by aligning data payloads with stricter security rules, correcting timestamp handling for batch writes, and implementing robust undefined value cleaning.
+- Fixed Firestore pathing for recipe documents to correctly use a top-level `/recipes` collection.
+- Addressed an issue where user profile creation failed for admin users due to restrictive Firestore rules; rules now correctly accommodate admin status based on custom claims.
+- Resolved application getting stuck on the "Authenticating..." screen by fixing the user profile creation flow and ensuring robust `authLoading` state management in `AuthContext`.
+- Corrected various TypeScript errors across multiple components and service files related to type mismatches, incorrect imports, and property access on union types.
+- Ensured `RecipeDNADetail` is correctly passed from UI through to the local database storage when a recipe is saved after DNA generation.
+
+### Changed
+- Refined `recipeRepository.ts` to ensure `originalNumericId` is consistently set and included in Firestore payloads.
+- Updated `firestoreService.ts` types (`FirestoreRecipeDoc`, `RecipeAddData`) and mapping functions (`mapDocToRecipe`, `firestoreAddRecipe`) to be comprehensive for all new `Recipe` fields, including nested objects like `aiAnalyzedTitle` and `userNutritionInput`.
+- Updated `recipeStore.ts` actions to correctly call repository functions and manage `associatedDna` for saving.
+- Improved `RecipeFormState` in `RecipeEdit.tsx` to handle `aiAnalyzedTitle` as an object, aligning with the main `Recipe` type.
+
+### Added
+- Payload cleaning logic in `recipeRepository.ts` to convert `undefined` values to `null` or delete them before Firestore writes, preventing "Unsupported field value" errors.
+- Explicit server timestamp (`serverTimestamp()`) usage in `recipeRepository.ts` for `createdAt` and `lastModified` fields in Firestore batch operations.
 2024-05-26
 feat(data): Refactor Recipe data model and local DB for separate DNA storage
 - Centralized Recipe, Ingredient, Nutrition types in `types/index.ts`.
