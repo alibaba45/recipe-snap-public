@@ -1,4 +1,29 @@
 Changelog:
+
+### ✨ New Features
+2024-05-30
+*   **AI Agent: Textual Refiner (`/api/ai/refine-text`)**
+    *   Implemented new API endpoint to refine specific text fields within a recipe (e.g., description, ingredient lines, instruction steps) based on user goals.
+    *   Supports intelligent updates to related parsed DNA fields to maintain consistency when `originalLineText` of an item is changed.
+    *   Uses `polishRecipeToolOutputSchema` for structured AI suggestions.
+    *   Includes conditional authentication bypass for development and Firebase ID token verification for production.
+    *   Integrated with centralized AI client and retry/fallback logic.
+
+### 🐛 Bug Fixes & Improvements
+
+*   **Firebase Admin SDK Initialization:**
+    *   Resolved "Default Firebase app does not exist" and "Invalid PEM formatted message" errors by ensuring correct service account credentials and private key formatting in `.env.local`.
+    *   Improved robustness of `src/lib/firebase/admin.ts` to better handle initialization failures and explicitly track initialization status.
+*   **API Authentication:**
+    *   Secured `/api/ai/incorporate-element` with Firebase ID token verification and a development bypass mechanism.
+    *   Addressed TypeScript error `'adminAuth' is possibly 'null'` by checking Admin SDK initialization status before use in API routes.
+*   **Element Incorporator API (`/api/ai/incorporate-element`):**
+    *   Removed `tempUserId` in favor of authenticated user context.
+
+### ⚙️ Refinements
+
+*   Standardized API key environment variable to `GEMINI_API_KEY`.
+*   Enhanced logging in API routes for better debugging and context.
 2024-05-28
 ### Fixed
 - Resolved critical Firestore permission errors for recipe create, update, and delete operations by aligning data payloads with stricter security rules, correcting timestamp handling for batch writes, and implementing robust undefined value cleaning.
