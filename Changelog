@@ -1,4 +1,27 @@
 Changelog:
+2024-05-31
+### Changed
+- Modified `/api/ai/polish-session/start/route.ts`:
+    - Updated `StartPolishSessionRequestBody` to accept client-provided `recipeSnapshot` and `recipeDNADetailSnapshot`.
+    - Removed direct server-side IndexedDB fetching (`getRecipeById`).
+    - Implemented `initialUserQuery` handling to call `/api/ai/refine-text` agent if DNA is present, including propagation of dev auth bypass headers.
+    - Defers proactive DNA generation; user is informed if DNA is needed for `initialUserQuery` but missing.
+- Modified `/api/ai/polish-session/[sessionId]/interact/route.ts`:
+    - `accept_suggestion` logic now calls `applyAiModificationToDNA` and `saveRecipeDNADetail` (from `lib/db.ts` for IDB). (Correction: `saveRecipeDNADetail` call was removed as per client-managed data strategy, client is responsible for IDB save).
+    - Ensured `token` and `authenticatedUserId` are correctly scoped from the authentication block.
+- Modified `/api/ai/refine-text/route.ts`:
+    - Significantly improved the mapping logic to translate AI tool call arguments into well-structured `AiModificationAction` objects with more accurate `targetType`, `targetId`, and `targetPropertyKey`.
+    - Made `targetType` matching from AI response case-insensitive.
+- Modified `src/types/index.ts`:
+    - `PolishSessionData.currentRecipeDNADetailSnapshot` is now `RecipeDNADetail | null`.
+    - Ensured `AiModificationAction` contains necessary fields like `id`, `newValue`, and potentially `aiExplanation` or `modificationNote` for suggestion context.
+- Modified `src/lib/dnaProcessor.ts`:
+    - Refined array manipulation logic in `applyAiModificationToDNA` to more strictly construct new line items (`AnnotatedIngredient`, etc.) based on `itemType`, ensuring correct field mapping.
+
+### Fixed
+- Resolved multiple TypeScript errors across `/start/route.ts`, `/interact/route.ts`, and related to type definitions concerning variable scope, property existence, and type assignability.
+- Addressed issue where `fetch` calls from one API route to another were failing due to missing propagation of `X-Dev-Bypass-Auth` headers.
+- Corrected `X-Dev-Bypass-Auth` header value in Postman to match `DEV_BYPASS_AUTH_SECRET` to correctly trigger dev authentication bypass, resolving initial 503 errors on `/start`.
 
 ### ✨ New Features
 2024-05-30
