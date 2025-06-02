@@ -1,4 +1,40 @@
 Changelog:
+2024-06-02
+🚀 New Features & Enhancements:
+Polisher Session Management API (/api/ai/polish-session/start, /api/ai/polish-session/[sessionId]/interact):
+Successfully established API endpoints for creating and interacting with polishing sessions.
+Sessions now correctly handle recipes initiated with temporary client-side UUIDs (sending recipeSnapshot: null) as well as potentially existing recipes.
+/start route can now process an initialUserQuery by calling the /api/ai/refine-text agent and returning initial suggestions.
+/interact route now supports user_message (triggering /refine-text), accept_suggestion, and decline_suggestion actions.
+Implemented dev authentication bypass mechanism for easier testing.
+DNA Processing Integration (dnaProcessor.ts):
+The applyAiModificationToDNA function is now integrated into the accept_suggestion flow, correctly applying AI-suggested changes (e.g., REPLACE_FIELD, REPLACE_LINE_ITEM) to the recipe DNA in the server-side session state.
+Client-Side Polishing Hook (usePolishingSession.ts):
+Successfully calls the /start and /interact API routes.
+Manages session state including sessionId, currentDNA, pendingSuggestions, and chatHistory.
+Correctly handles dev bypass header injection for client-side API calls.
+Propagates DNA updates (received from /interact after accepting suggestions) to parent components via an onDnaUpdated callback.
+Intentionally defers IndexedDB saving for new recipes (temporary IDs) to the parent UI component, while handling DB saves for existing recipes with numeric IDs.
+UI Integration (RecipeEdit.tsx, AIChatPanel.tsx, RecipePolisher.tsx):
+The full UI flow for initiating a polishing session (generating draft, generating DNA, starting polisher) is now functional.
+The AI Assistant panel correctly displays chat history and AI-generated suggestions.
+Crucially, main recipe form fields (e.g., Title, Instructions) in RecipeEdit.tsx now update dynamically when a corresponding AI suggestion is accepted in the Polisher panel. This is achieved via a direct callback chain and formState updates, ensuring UI consistency with the polished DNA.
+/api/ai/refine-text Agent Enhancements:
+Improved mapping of AI tool call arguments to well-structured AiModificationAction objects, ensuring the newValue (refined text) is correctly populated and passed back.
+Now handles refinement requests for dnaAiAnalyzedTitleObject.titleString and annotatedInstructionStep.originalLineText in addition to dnaAiOverallSummary.
+🐛 Bug Fixes & Stability Improvements:
+Critical Firebase Admin SDK Initialization Resolved: Fixed persistent TypeError: Cannot read properties of undefined (reading 'INTERNAL') by switching lib/firebase/admin.ts to use require() for the firebase-admin module and the service account JSON key file, ensuring stable server-side Firebase services.
+Client-Side Authentication for Dev Bypass: Resolved 401 Unauthorized errors from client-side API calls by ensuring NEXT_PUBLIC_DEV_BYPASS_AUTH_SECRET environment variable was correctly configured and used.
+API Request Validation: Corrected validation logic in /api/ai/polish-session/start to gracefully handle recipeSnapshot: null for new recipes, preventing 400 Bad Request errors.
+Server-Side DB Calls Removed: Eliminated erroneous calls to client-side IndexedDB utilities (saveRecipeDNADetail) from server-side API routes, fixing indexedDB is not defined errors.
+Type Safety & Consistency:
+Resolved numerous TypeScript errors by standardizing type definitions (especially AiModificationAction, PolishSessionData, StartPolishSessionRequestBody) across client, server, and shared type files.
+Correctly typed recipeId to handle both temporary string UUIDs and potential numeric IDs in session data and request bodies.
+Ensured PolishSessionData.currentRecipeSnapshot can correctly be Recipe | null.
+Addressed Parameter 's' implicitly has an 'any' type errors by explicitly typing array method callback parameters.
+Data Flow for UI Updates: Refined the data flow to ensure that when the Polisher updates DNA, these changes are reliably propagated back to RecipeEdit.tsx to update the main form fields. Reinstated a direct callback mechanism (handleDnaUpdateFromPolisher) for immediate formState updates, which also syncs the global aiInterfaceStore.
+🛠️ Refactoring:
+Simplified data flow for DNA updates by removing one layer of prop drilling for onDnaUpdated and having RecipePolisher directly update the global Zustand store (aiInterfaceStore), with RecipeEdit.tsx's useEffect syncing form state from this store (though later refined to favor a direct callback for RecipeEdit form updates due to observed reliability). The current active approach uses the direct callback to RecipeEdit which then also updates the store.
 2024-05-31
 ### Changed
 - Modified `/api/ai/polish-session/start/route.ts`:
