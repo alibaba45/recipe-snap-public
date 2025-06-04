@@ -1,4 +1,30 @@
 Changelog:
+2024-06-03
+feat: Implement AI-driven Polisher Agent with dynamic planning
+
+- Refactor Polisher Agent (`/api/ai/polish-session/.../interact`):
+  - On user message, Polisher now acts as an AI Planner.
+  - It calls an internal LLM (via `intentDetectionTool.generatePlan`) with user input, chat history, and current recipe DNA.
+  - The LLM generates an `ExecutionPlan` (an array of structured `PlannedToolCall` objects specifying Feature Agents to call and their parameters, or UI actions like asking clarifying questions).
+  - Polisher sends this `ExecutionPlan` to the client.
+- New Client-Side Plan Execution Logic (`usePolishingSession.ts`):
+  - Receives `ExecutionPlan` from the Polisher Agent.
+  - Iterates through the plan, making asynchronous API calls to new, specialized backend Feature Agent endpoints (e.g., `/api/ai/agents/refine-text`).
+  - Passes parameters from the plan, current client-side DNA, and chat history to Feature Agents.
+  - Accumulates structured results (`PolishRecipeToolOutputSchema`) from Feature Agents.
+  - Displays compiled suggestions to the user when indicated by the plan.
+- New Feature Agent Endpoints (e.g., `/api/ai/agents/refine-text`):
+  - Receive specific task parameters, full DNA, and chat history context from the client.
+  - Perform specialized AI tasks (e.g., text refinement for a specific DNA item).
+  - Return results structured as `{explanation: string, modifications: AiModificationAction[]}`.
+- Enhanced ID Management:
+  - Polisher's AI Planner identifies DNA Line Item IDs for targeting.
+  - Client sends these IDs to Feature Agents.
+  - Feature Agents return modifications referencing these DNA Line Item IDs.
+  - Client adds unique Client-Side Suggestion IDs for UI interaction.
+  - Acceptance/declination uses Client-Side Suggestion IDs, backend maps to DNA Line Item IDs for modification.
+- Conversational Flow Improvement:
+  - Polisher's AI Planner can generate plans that include "AskClarifyingQuestion" or "RespondWithMessage" steps, allowing for more natural dialogue before generating modification suggestions.
 2024-06-02
 🚀 New Features & Enhancements:
 Polisher Session Management API (/api/ai/polish-session/start, /api/ai/polish-session/[sessionId]/interact):
