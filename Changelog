@@ -1,4 +1,21 @@
 Changelog:
+
+2024-06-05
+
+### Fixed
+- Resolved critical bug where DNA modifications (title, summary, tags, ingredient properties) were not being applied by `dnaProcessor.ts` due to `targetType` string casing mismatches with enum definitions. Standardized `AiModificationTargetType` enum string values to `UPPERCASE_UNDERSCORE_CASE`.
+- Fixed issue where accepting one AI suggestion caused all other pending suggestions to disappear from the UI. Client now correctly maintains its list and only updates the status of the processed suggestion.
+- Corrected UI updates in `RecipeEdit.tsx`: form fields for recipe title, summary, and ingredients now properly reflect changes after AI suggestions are accepted and DNA is modified.
+- Fixed suggestion previews in `RecipePolisher.tsx` to display the correct `newTextValue` from AI suggestions.
+
+### Changed
+- Refined `dnaProcessor.ts` to robustly handle `REPLACE_FIELD` for various DNA targets including `aiAnalyzedTitle` properties, `aiOverallSummary`, and properties of items within `annotatedIngredients`.
+- Updated `usePolishingSession.ts` to ensure `onDnaUpdated` callback is reliably fired with correctly modified DNA.
+- Modified `RecipeEdit.tsx` (`handleDnaUpdateFromPolisher`) to include logic for syncing `ingredientsText` (and conceptually `preparationText`) from the updated `RecipeDNADetail` object.
+
+### Added
+- Enhanced logging in `dnaProcessor.ts` for better debugging of type matching and modification application.
+- Discussed and planned next steps for a "Guided Execution within Feature Agent" architecture to improve performance by allowing the Planner to output more direct instructions for simple operations, enabling Feature Agents to potentially bypass internal LLM calls for these cases.
 2024-06-04
 ### Backend Polisher Agent & Feature Agents
 - Feat: Implemented `/api/ai/generate-plan` route with LLM tool calling for dynamic plan generation (clarification questions or multi-step agent execution plans).
