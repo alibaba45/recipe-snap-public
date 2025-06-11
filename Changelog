@@ -1,4 +1,11 @@
 Changelog:
+2024-06-11
+Feature: Implemented a robust onBlur analysis flow that automatically checks user edits for significance and proposes an AI-driven plan for improvement.
+Feature: Deployed a "Mission Log" UI to provide users with transparent, step-by-step feedback on the AI's background processes.
+Feature: Architected and implemented a "Plan for Review" checkpoint, ensuring users have full control and must approve complex AI plans before execution.
+Fix: Resolved a series of critical client-side bugs, including state deadlocks, infinite-render loops, and data-mismatch crashes, creating a stable and reliable user experience.
+Fix: Hardened the back-end Planner API (/generate-plan) by aligning its tool schema and system prompt, significantly improving the reliability and structural correctness of the LLM's output.
+Refactor: The usePolishingSession hook is now the definitive client-side orchestrator, successfully managing the "Instant UI" update pattern and the "DNA Cohesion Engine" follow-up suggestion loop.
 2024-06-07
 refactor(ai)!: Overhauled the AI Planner and Polishing architecture for significant performance and responsiveness improvements. The Planner can now generate "direct suggestions" for simple edits, providing near-instant UI feedback.
 feat(polisher): Implemented an "Instant UI Update" feature where accepted AI suggestions are applied to the local recipe data immediately, reflecting changes in the main form in real-time without waiting for backend confirmation.
